@@ -20,7 +20,7 @@ import java.util.Optional;
  */
 public class DocumentManager {
 
-    private List<Document> storage = new ArrayList<>();
+    private final List<Document> storage = new ArrayList<>();
 
     /**
      * Implementation of this method should upsert the document to your storage
@@ -48,7 +48,49 @@ public class DocumentManager {
      */
     public List<Document> search(SearchRequest request) {
 
-        return Collections.emptyList();
+        List<Document> foundDocs = new ArrayList<>();
+
+        for (Document doc : storage) {
+            if (doesMatch(doc, request)) {
+                foundDocs.add(doc);
+            }
+        }
+
+        return foundDocs;
+    }
+
+    private boolean doesMatch(Document doc, SearchRequest request) {
+        if (request.getCreatedFrom() != null) {
+            if (doc.getCreated() == null || doc.getCreated().isBefore(request.getCreatedFrom())) {
+                return false;
+            }
+        }
+
+        if (request.getCreatedTo() != null) {
+            if (doc.getCreated() == null || doc.getCreated().isAfter(request.getCreatedTo())) {
+                return false;
+            }
+        }
+
+        for (String prefix : request.getTitlePrefixes()) {
+            if(doc.getTitle().contains(prefix)) {
+                return true;
+            }
+        }
+
+        for (String content : request.getContainsContents()) {
+            if(doc.getTitle().contains(content)) {
+                return true;
+            }
+        }
+
+        for (String authorId : request.getAuthorIds()) {
+            if (doc.getAuthor().getId().equals(authorId)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -58,6 +100,12 @@ public class DocumentManager {
      * @return optional document
      */
     public Optional<Document> findById(String id) {
+
+        for (Document doc : storage) {
+            if(doc.getId().equals(id)) {
+                return Optional.of(doc);
+            }
+        }
 
         return Optional.empty();
     }
