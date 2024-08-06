@@ -47,6 +47,9 @@ public class DocumentManager {
      * @return list matched documents
      */
     public List<Document> search(SearchRequest request) {
+        if (request == null) {
+            return Collections.emptyList();
+        }
 
         List<Document> foundDocs = new ArrayList<>();
 
