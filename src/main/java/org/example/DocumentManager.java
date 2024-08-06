@@ -33,6 +33,14 @@ public class DocumentManager {
         // generate id if document does not have it
         if (document.getId() == null || document.getId().isEmpty()) {
             document.setId(String.valueOf(storage.size() + 1));
+        } else {
+            for (int i = 0; i < storage.size(); i++) {
+                if (storage.get(i).getId().equals(document.getId())) {
+                    storage.set(i, document);
+                    return document;
+                }
+            }
+            storage.add(document);
         }
 
         storage.add(document);
