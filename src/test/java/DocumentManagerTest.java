@@ -14,6 +14,14 @@ public class DocumentManagerTest {
                 .name("Some Name")
                 .build();
         DocumentManager.Document document = DocumentManager.Document.builder()
+                .id("")
+                .title("Title")
+                .content("Some content")
+                .author(author)
+                .created(Instant.now())
+                .build();
+
+        DocumentManager.Document result = DocumentManager.Document.builder()
                 .id("1")
                 .title("Title")
                 .content("Some content")
@@ -21,8 +29,10 @@ public class DocumentManagerTest {
                 .created(Instant.now())
                 .build();
 
-        DocumentManager.Document result = documentManager.save(document);
+        assertEquals(documentManager.save(document), result);
 
+        document.setId("2");
+        result = documentManager.save(document);
         assertEquals(document, result);
     }
 }
