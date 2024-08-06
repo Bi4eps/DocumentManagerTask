@@ -83,30 +83,43 @@ public class DocumentManager {
         }
 
         if (request.getTitlePrefixes() != null && doc.getTitle() != null) {
+            boolean titleMatch = false;
             for (String prefix : request.getTitlePrefixes()) {
                 if (doc.getTitle().contains(prefix)) {
-                    return true;
+                    titleMatch = true;
+                    break;
                 }
+            }
+            if (!titleMatch) {
+                return false;
             }
         }
 
         if (request.getContainsContents() != null && doc.getContent() != null) {
+            boolean contentMatch = false;
             for (String content : request.getContainsContents()) {
                 if (doc.getContent().contains(content)) {
-                    return true;
+                    contentMatch = true;
+                    break;
                 }
+            }
+            if (!contentMatch) {
+                return false;
             }
         }
 
         if (request.getAuthorIds() != null && doc.getAuthor() != null) {
+            boolean authorMatch = false;
             for (String authorId : request.getAuthorIds()) {
                 if (doc.getAuthor().getId().equals(authorId)) {
-                    return true;
+                    authorMatch = true;
+                    break;
                 }
             }
+            return authorMatch;
         }
 
-        return false;
+        return true;
     }
 
     /**
