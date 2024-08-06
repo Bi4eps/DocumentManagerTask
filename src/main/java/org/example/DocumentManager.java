@@ -40,7 +40,6 @@ public class DocumentManager {
                     return document;
                 }
             }
-            storage.add(document);
         }
 
         storage.add(document);
@@ -83,21 +82,27 @@ public class DocumentManager {
             }
         }
 
-        for (String prefix : request.getTitlePrefixes()) {
-            if(doc.getTitle().contains(prefix)) {
-                return true;
+        if (request.getTitlePrefixes() != null && doc.getTitle() != null) {
+            for (String prefix : request.getTitlePrefixes()) {
+                if (doc.getTitle().contains(prefix)) {
+                    return true;
+                }
             }
         }
 
-        for (String content : request.getContainsContents()) {
-            if(doc.getTitle().contains(content)) {
-                return true;
+        if (request.getContainsContents() != null && doc.getContent() != null) {
+            for (String content : request.getContainsContents()) {
+                if (doc.getContent().contains(content)) {
+                    return true;
+                }
             }
         }
 
-        for (String authorId : request.getAuthorIds()) {
-            if (doc.getAuthor().getId().equals(authorId)) {
-                return true;
+        if (request.getAuthorIds() != null && doc.getAuthor() != null) {
+            for (String authorId : request.getAuthorIds()) {
+                if (doc.getAuthor().getId().equals(authorId)) {
+                    return true;
+                }
             }
         }
 
@@ -111,9 +116,8 @@ public class DocumentManager {
      * @return optional document
      */
     public Optional<Document> findById(String id) {
-
         for (Document doc : storage) {
-            if(doc.getId().equals(id)) {
+            if (doc.getId().equals(id)) {
                 return Optional.of(doc);
             }
         }
